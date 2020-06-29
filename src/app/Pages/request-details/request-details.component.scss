@@ -1,0 +1,50 @@
+*{
+    text-align: right;
+    direction: rtl;
+}
+.first-row, .second-row, .third-row{
+    // display: flex;
+    // justify-content: space-around;
+    // flex-wrap: wrap;
+}
+.main{
+    margin-top:50px;
+    height: auto;
+    min-height: 80vh;;
+    justify-content: space-around;
+}
+mat-expansion-panel{
+    margin-top: 30px !important;
+}
+mat-form-field{
+    text-align: right;
+}
+form{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+mat-panel-description{
+    direction: ltr !important;
+    padding-left:20px;
+}
+.responseTxt{
+    width:100%;
+}
+.my-fab {
+    width: 20px;
+    height: 20px;
+    line-height: 14px;
+    font-size: 14px;
+
+    &::ng-deep .mat-button-wrapper{
+        line-height: 14px;
+        padding: 0;
+
+         .mat-icon {
+            font-size: 14px;
+            padding-right: 3px;
+            padding-top: 3px;
+         }
+   }
+}

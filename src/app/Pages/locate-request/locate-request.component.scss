@@ -1,0 +1,65 @@
+.container {
+    direction: rtl;
+    text-align: right;
+}
+section .title {
+    background-color: #f1f1f1;
+    padding: 10px;
+}
+mat-form-field {
+    text-align: right;
+}
+.input form {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 60px;
+    flex-wrap: wrap;
+}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    /*change color of label*/
+    background-color: white !important;
+    width: 181px;
+}
+.search-button {
+    text-align: left;
+    margin-top: 40px;
+}
+.search-button button {
+    width: 150px;
+    margin-right: 20px;
+}
+.data-table {
+    margin-top: 50px;
+}
+.data-table table {
+    text-align: right;
+}
+::ng-deep th.mat-header-cell {
+    text-align: right !important;
+}
+::ng-deep .mat-table {
+    width: 100%;
+}
+
+::ng-deep th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+    padding-right: 20px;
+}
+.spinner {
+    display: flex;
+    justify-content: center;
+}
+.input-errors {
+    text-align: right;
+    width: 100%;
+    color: #ff5454;
+}
+.footer{
+    position: absolute;
+    bottom:0px;
+}
+body{
+    background-color: #37447514;
+}

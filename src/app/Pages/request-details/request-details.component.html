@@ -1,0 +1,319 @@
+<div class="container">
+  <section class="header">
+    <mat-toolbar>
+      <span>פרטי בקשה</span>
+    </mat-toolbar>
+  </section>
+  <section class="main">
+    <section class="first-row row">
+      <div class="electoral col-12 col-xs-12 col-xl-6">
+        <mat-accordion>
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="mat-title">
+                פרטי בקשה
+              </mat-panel-title>
+              <mat-panel-description> </mat-panel-description>
+            </mat-expansion-panel-header>
+            <form [formGroup]="requestDetailsForm">
+              <mat-form-field>
+                <input
+                  formControlName="requestName"
+                  matInput
+                  placeholder="שם בקשה"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  type="text"
+                  aria-label="Number"
+                  placeholder="יישוב"
+                  matInput
+                  formControlName="city"
+                  [matAutocomplete]="auto"
+                />
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let city of filteredCities | async"
+                    [value]="city.name"
+                  >
+                    {{ city.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  formControlName="submitsRequest"
+                  matInput
+                  placeholder="שם בא כוח"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  formControlName="subSubmitsRequest"
+                  matInput
+                  placeholder="שם ממלא מקום בא כוח"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  formControlName="submitsRequestID"
+                  matInput
+                  placeholder="ת.ז. של בא כוח"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>סוג בקשה</mat-label>
+                <mat-select formControlName="requestType">
+                  <mat-option *ngFor="let option of options" [value]="option">{{
+                    option
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>תאור</mat-label>
+                <textarea formControlName="description" matInput></textarea>
+              </mat-form-field>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <div class="request-details col-12 col-xs-12 col-xl-6">
+        <mat-accordion>
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="mat-title">
+                פרטי רשימה
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="electoralForm">
+              <mat-form-field>
+                <mat-label>רשימה</mat-label>
+                <mat-select formControlName="functionList">
+                  <mat-option *ngFor="let option of options" [value]="option">{{
+                    option
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>סוג רשימה</mat-label>
+                <mat-select formControlName="functionType">
+                  <mat-option *ngFor="let option of options" [value]="option">{{
+                    option
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>שם סיעה יוצאת</mat-label>
+                <mat-select formControlName="functionName">
+                  <mat-option *ngFor="let option of options" [value]="option">{{
+                    option
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  formControlName="candidateName"
+                  matInput
+                  placeholder="שם מועמד"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  formControlName="signForLead"
+                  matInput
+                  placeholder="חתימות לראש רשות"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  formControlName="signForList"
+                  matInput
+                  placeholder="חתימות לרשימה"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  formControlName="candidateId"
+                  matInput
+                  placeholder="ת.ז. מועמד לרשימה"
+                />
+              </mat-form-field>
+              <span>
+                <button
+                  mat-mini-fab
+                  color="primary"
+                  class="my-fab"
+                  (click)="openDialog()"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+                <mat-form-field>
+                  <input
+                    formControlName="candidateList"
+                    matInput
+                    placeholder="מועמדים למועצה"
+                  />
+                </mat-form-field>
+              </span>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </section>
+
+    <section class="second-row row">
+      <div class="status col-12 col-xs-12 col-xl-6">
+        <mat-accordion>
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="mat-title">
+                סטטוס
+              </mat-panel-title>
+              <mat-panel-description> </mat-panel-description>
+            </mat-expansion-panel-header>
+            <form [formGroup]="statusForm">
+              <mat-form-field class="responseTxt">
+                <mat-label>תגובת משרד הפנים</mat-label>
+                <textarea formControlName="status" matInput></textarea>
+              </mat-form-field>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <div class="document-attach col-12 col-xs-12 col-xl-6">
+        <mat-accordion>
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="mat-title">
+                צירוף מסמכים
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <input
+              type="file"
+              #file
+              style="display: none;"
+              (change)="onFilesAdded($event.target.files)"
+              multiple
+            />
+            <button mat-raised-button color="primary" (click)="addDocs()">
+              צרף מסמכים <fa-icon [icon]="faPlus"></fa-icon>
+            </button>
+            <table class="table" *ngIf="files && files.length > 0">
+              <thead>
+                <tr>
+                  <th>שם</th>
+                  <th>תאור</th>
+                  <th>סוג</th>
+                  <th>תאריך</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let file of files">
+                  <td scope="row">
+                    <fa-icon
+                      [icon]="getDocIcon(mimeParse(file.type))"
+                    ></fa-icon>
+                    &nbsp;&nbsp; {{ file.name | fileName }}
+                  </td>
+                  <td></td>
+                  <td>{{ mimeParse(file.type) }}</td>
+                  <td>{{ now }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </section>
+    <section class="third-row row">
+      <div class="document-list col-12 col-xs-12 col-xl-6">
+        <mat-accordion>
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="mat-title">
+                מסמכים מצורפים
+              </mat-panel-title>
+              <mat-panel-description> </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>שם מסמך</th>
+                  <th>תאריך</th>
+                  <th>תיאור</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td scope="row">בדיקה</td>
+                  <td>12/12/2020</td>
+                  <td>בדיקה בדיקה</td>
+                </tr>
+              </tbody>
+            </table>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <div class="contact col-12 col-xs-12 col-xl-6">
+        <mat-accordion>
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="mat-title">
+                איש קשר
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="contactForm">
+              <span>
+                <fa-icon [icon]="faUser" style="padding-left: 4px;"></fa-icon>
+                <mat-form-field>
+                  <input
+                    formControlName="contactName"
+                    matInput
+                    placeholder="שם איש קשר"
+                  />
+                </mat-form-field>
+              </span>
+              <span>
+                <fa-icon [icon]="faPhone" style="padding-left: 4px;"></fa-icon>
+
+                <mat-form-field>
+                  <input formControlName="phone" matInput placeholder="טלפון" />
+                </mat-form-field>
+              </span>
+              <span>
+                <fa-icon [icon]="faAt" style="padding-left: 4px;"></fa-icon>
+
+                <mat-form-field>
+                  <input
+                    formControlName="email"
+                    matInput
+                    placeholder="אימייל"
+                  />
+                </mat-form-field>
+              </span>
+              <span>
+                <fa-icon [icon]="faLink" style="padding-left: 4px;"></fa-icon>
+
+                <mat-form-field>
+                  <input
+                    formControlName="url"
+                    matInput
+                    placeholder="אתר אינטרנט"
+                  />
+                </mat-form-field>
+              </span>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </section>
+  </section>
+  <footer>
+    <mat-toolbar>
+      <button mat-raised-button color="primary">שלח</button>
+    </mat-toolbar>
+  </footer>
+</div>
