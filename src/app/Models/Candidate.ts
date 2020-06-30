@@ -1,6 +1,6 @@
 export class Candidate{
     name: string;
-    id: string;
+    ID: string;
     numInElect: number;
     age:number;
 }

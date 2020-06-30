@@ -120,42 +120,22 @@
               </mat-form-field>
               <mat-form-field>
                 <input
-                  formControlName="signForLead"
-                  matInput
-                  placeholder="חתימות לראש רשות"
-                />
-              </mat-form-field>
-              <mat-form-field>
-                <input
-                  formControlName="signForList"
-                  matInput
-                  placeholder="חתימות לרשימה"
-                />
-              </mat-form-field>
-              <mat-form-field>
-                <input
                   formControlName="candidateId"
                   matInput
                   placeholder="ת.ז. מועמד לרשימה"
                 />
               </mat-form-field>
-              <span>
-                <button
-                  mat-mini-fab
-                  color="primary"
-                  class="my-fab"
-                  (click)="openDialog()"
-                >
-                  <mat-icon>add</mat-icon>
-                </button>
-                <mat-form-field>
-                  <input
-                    formControlName="candidateList"
-                    matInput
-                    placeholder="מועמדים למועצה"
-                  />
-                </mat-form-field>
-              </span>
+              <div class="links">
+                <span>
+                  <a mat-flat-button (click)="openDialogLead()">חתימות לראש רשות</a>
+                </span>
+                <span>
+                  <a mat-flat-button (click)="openDialogList()">חתימות לרשימה</a>
+                </span>
+                <span>
+                  <a mat-flat-button (click)="openDialog()">מועמדים למועצה</a>
+                </span>
+              </div>
             </form>
           </mat-expansion-panel>
         </mat-accordion>

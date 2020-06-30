@@ -10,16 +10,21 @@ import {
 import * as XLSX from "xlsx";
 import { ExcelService } from "src/app/Services/excel.service";
 const { read, write, utils } = XLSX;
+const MIN_SIGN_NUMBER = 10;
 
 @Component({
-  selector: "app-candidate-details",
-  templateUrl: "./candidate-details.component.html",
-  styleUrls: ["./candidate-details.component.scss"],
+  selector: 'app-sign-for-lead',
+  templateUrl: './sign-for-lead.component.html',
+  styleUrls: ['./sign-for-lead.component.scss']
 })
-export class CandidateDetailsComponent implements OnInit {
+export class SignForLeadComponent implements OnInit {
+
   candAddForm: FormGroup;
   @ViewChild("file") file;
-  candidateList: Array<Candidate> = [  ];
+  candidateList: Array<Candidate> = [
+    { name: "ישראל ישראל", age: 33, ID: "32156478", numInElect: 4 },
+    { name: "ישראל ישראל", age: 33, ID: "31156478", numInElect: 4 },
+  ];
   candidateListFiltered: Array<Candidate> = [];
   faEdit = faEdit;
   faEraser = faEraser;
@@ -33,11 +38,13 @@ export class CandidateDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.candAddForm = new FormGroup({
       name: new FormControl("", Validators.required),
-      age: new FormControl("", [Validators.required, Validators.min(18)]),
       id: new FormControl("", Validators.required),
-      numberInElectral: new FormControl("", Validators.required),
+      age: new FormControl("", Validators.required),
     });
     this.candidateListFiltered = [...this.candidateList];
+    if(this.candidateListFiltered.length <MIN_SIGN_NUMBER ){
+      this.excelImportErrorMessages.push(`מספר החתימות פחות מ ${MIN_SIGN_NUMBER}`);
+    }
   }
 
   onFilesAdded(e) {
@@ -92,7 +99,7 @@ export class CandidateDetailsComponent implements OnInit {
       arraylist.forEach((el: any) => {
         if (el.Age < 18) {
           this.excelImportErrorMessages.push(
-            `מועמד מספר ${el.IdInElectral} מתחת לגיל 18. נמצא בשורה ${el.__rowNum__} בקובץ.`
+            `חותם מספר ${el.IdInElectral} מתחת לגיל 18. נמצא בשורה ${el.__rowNum__} בקובץ.`
           );
           return;
         }
@@ -112,13 +119,13 @@ export class CandidateDetailsComponent implements OnInit {
           console.log("## tmpArrDup.length ", tmpArrDup.length);
           if (tmpArrDup.length > 0) {
             this.excelImportErrorMessages.push(
-              `המועמד בעל ת.ז. ${el.ID} כבר קיים ברשימה `
+              `חותם בעל ת.ז. ${el.ID} כבר קיים ברשימה `
             );
           }
 
           if (tmpArr.length >= 2) {
             this.excelImportErrorMessages.push(
-              ` זוהתה כפילות, מועמד בעל ת.ז. ${el.ID} מופיע ${tmpArr.length} פעמים `
+              ` זוהתה כפילות, חותם בעל ת.ז. ${el.ID} מופיע ${tmpArr.length} פעמים `
             );
           }
           console.log("tmpArr ", tmpArr);
@@ -142,7 +149,11 @@ export class CandidateDetailsComponent implements OnInit {
           this.candidateListFiltered.push(candidate);
         }
       );
+      if(this.candidateListFiltered.length <MIN_SIGN_NUMBER ){
+        this.excelImportErrorMessages.push(`מספר החתימות פחות מ ${MIN_SIGN_NUMBER}`);
+      }
     };
+
     console.log("##candidateListFiltered ", this.candidateListFiltered);
   }
   addFile() {
@@ -152,7 +163,6 @@ export class CandidateDetailsComponent implements OnInit {
   removeCandidate(id) {
     console.log("delete ", id);
     this.candidateListFiltered = this.candidateListFiltered.filter((cand) => {
-      console.log("----> ", cand);
       return cand.ID.toString().indexOf(id) == -1;
     });
     console.log("candidateListFiltered ", this.candidateListFiltered);
@@ -164,14 +174,13 @@ export class CandidateDetailsComponent implements OnInit {
     if (this.candAddForm.valid) {
       let newCand = new Candidate();
       newCand.name = this.candAddForm.get("name").value;
-      newCand.age = this.candAddForm.get("age").value;
       newCand.ID = this.candAddForm.get("id").value;
-      newCand.numInElect = this.candAddForm.get("numberInElectral").value;
+      newCand.age = this.candAddForm.get("age").value;
       console.log(newCand);
       if (
         this.candidateListFiltered.filter((x) => x.ID === newCand.ID).length > 0
       ) {
-        this.excelImportErrorMessages.push(`המועמד כבר קיים`);
+        this.excelImportErrorMessages.push(`חותם  כבר קיים`);
         return;
       }
       this.candidateListFiltered.push(newCand);
@@ -184,4 +193,5 @@ export class CandidateDetailsComponent implements OnInit {
     this.excelService.exportToExcel(element);
 
   }
+
 }

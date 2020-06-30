@@ -1,0 +1,83 @@
+<div class="container-fluid">
+    <div class="title mat-display-1">
+    חתימות לרשימה
+    </div>
+    <form [formGroup]="candAddForm">
+      <div class="candidate-add row">
+        <mat-form-field class="col-12 col-lg-6">
+          <input matInput placeholder="מועמד למועצה" formControlName="name" />
+        </mat-form-field>
+        <mat-form-field class="col-12 col-lg-6">
+          <input matInput placeholder="ת.ז." formControlName="id" type="number"  />
+        </mat-form-field>
+        <mat-form-field class="col-12 col-lg-6">
+          <input matInput placeholder="גיל" formControlName="age" type="number" />
+        </mat-form-field>
+        <span class="col-12 error-msg" 
+        *ngIf="
+          !candAddForm.controls.age.valid &&
+          candAddForm.controls.age.touched
+        "
+      >
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon> הגיל המותר מעל 18</span
+      >
+  
+        <div class="controls">
+          <button mat-raised-button color="primary" (click)="addCandidate()" (disabled)="!candAddForm.valid">
+            הוסף +
+          </button>
+          <button mat-raised-button color="primary" (click)="addFile()">
+            יבא Excel <fa-icon [icon]="faFileExcel"></fa-icon>
+          </button>
+          <button mat-raised-button color="primary" (click)="exportToExcel()">
+              יצא  Excel<fa-icon [icon]="faFileExcel"></fa-icon>
+            </button>
+        </div>
+        <input
+          type="file"
+          #file
+          style="display: none;"
+          (change)="onFilesAdded($event.target.files)"
+          onclick="this.value = null" 
+        />
+      </div>
+      <div class="messages" *ngIf="excelImportErrorMessages.length > 0">
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngFor="let msg of excelImportErrorMessages"
+        >
+          <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+          <strong> {{ msg }}</strong>
+        </div>
+      </div>
+    </form>
+    <div class="candidate-table">
+      <table class="table" id="candTable">
+        <thead>
+          <tr>
+            <th>שם</th>
+            <th>ת.ז.</th>
+            <th>גיל</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cand of candidateListFiltered">
+            <td scope="row">{{ cand.name }}</td>
+            <td>{{ cand.ID }}</td>
+            <td>{{ cand.age }}</td>
+            <td style="padding: 0px;">
+              <div class="icons-container">
+                <span class="edit-icon"><fa-icon [icon]="faEdit"></fa-icon></span>
+                <span class="delete-icon" (click)="removeCandidate(cand.ID)"
+                  ><fa-icon [icon]="faEraser"></fa-icon
+                ></span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

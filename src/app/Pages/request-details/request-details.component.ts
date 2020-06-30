@@ -26,6 +26,9 @@ import {
   faLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { CandidateDetailsComponent } from "src/app/Components/candidate-details/candidate-details.component";
+import { ExcelService } from 'src/app/Services/excel.service';
+import { SignForListComponent } from 'src/app/Components/sign-for-list/sign-for-list.component';
+import { SignForLeadComponent } from 'src/app/Components/sign-for-lead/sign-for-lead.component';
 
 @Component({
   selector: "app-request-details",
@@ -69,15 +72,23 @@ export class RequestDetailsComponent implements OnInit {
   mm = String(this.today.getMonth() + 1).padStart(2, "0"); //January is 0!
   yyyy = this.today.getFullYear();
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private excelService: ExcelService) {}
   openDialog(): void {
     const dialogRef = this.dialog.open(CandidateDetailsComponent, {
       width: "600px",
       height: "800px",
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log("The dialog was closed");
+  }
+  openDialogList(): void {
+    const dialogRef = this.dialog.open(SignForListComponent, {
+      width: "600px",
+      height: "800px",
+    });
+  }
+  openDialogLead(): void {
+    const dialogRef = this.dialog.open(SignForLeadComponent, {
+      width: "600px",
+      height: "800px",
     });
   }
   ngOnInit(): void {
@@ -136,27 +147,9 @@ export class RequestDetailsComponent implements OnInit {
     return this.docIcons[type] ? this.docIcons[type] : faFile;
   }
 
-  mimeParse(file) {
-    //object that used to convert regular file extensions to mime types,
-
-    let mimes = {
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        "docx",
-      "image/jpeg": "jpg",
-      "image/gif": "gif",
-      "application/msword": "doc",
-      "image/tiff": "tif",
-      txt: "text/plain",
-      "video/mpeg": "mp4",
-      "application/vnd.ms-powerpoint": "ppt",
-      "application/pdf": "pdf",
-      "application/vnd.ms-excel": "xls",
-      "image/png": "png",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-        "xlsx",
-      "audio/mpeg": "mp3",
-    };
-
-    return mimes[file.toLowerCase()];
+  mimeParse(type){
+    return this.excelService.mimeParse(type);
   }
+
+
 }

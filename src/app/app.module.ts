@@ -26,6 +26,8 @@ import { FileNamePipe } from './Pipes/file-name.pipe';
 import {MatIconModule} from '@angular/material/icon';
 import { CandidateDetailsComponent } from './Components/candidate-details/candidate-details.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { SignForLeadComponent } from './Components/sign-for-lead/sign-for-lead.component';
+import { SignForListComponent } from './Components/sign-for-list/sign-for-list.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     RequestDetailsComponent,
     FileNamePipe,
     CandidateDetailsComponent,
+    SignForLeadComponent,
+    SignForListComponent,
 
   ],
   imports: [

@@ -48,3 +48,12 @@ mat-panel-description{
          }
    }
 }
+span a{
+    color: #1f1fc7;
+    font-weight: bold;
+}
+.links{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
