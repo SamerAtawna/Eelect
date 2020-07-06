@@ -4,7 +4,14 @@
       <span>פרטי בקשה</span>
     </mat-toolbar>
   </section>
+  <mat-progress-bar mode="query" *ngIf="isSaving"></mat-progress-bar>
   <section class="main">
+    <div class="main-controls">
+      <button mat-raised-button color="primary" (click)="save()" *ngIf="!blockCreate">שלח</button>
+      <div class="alert alert-danger" role="alert" *ngIf="blockCreate">
+        לא ניתן ליצור בקשות חדשות מעבר לתאריך {{ expDate }}
+      </div>
+    </div>
     <section class="first-row row">
       <div class="electoral col-12 col-xs-12 col-xl-6">
         <mat-accordion>
@@ -18,6 +25,7 @@
             <form [formGroup]="requestDetailsForm">
               <mat-form-field>
                 <input
+                  [disabled]="isNewRequest"
                   formControlName="requestName"
                   matInput
                   placeholder="שם בקשה"
@@ -35,9 +43,9 @@
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                   <mat-option
                     *ngFor="let city of filteredCities | async"
-                    [value]="city.name"
+                    [value]="city.Name"
                   >
-                    {{ city.name }}
+                    {{ city.Name }}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -60,15 +68,41 @@
                   formControlName="submitsRequestID"
                   matInput
                   placeholder="ת.ז. של בא כוח"
+                  type="tel"
                 />
               </mat-form-field>
               <mat-form-field>
+                <input
+                  type="text"
+                  placeholder="סוג בקשה"
+                  matInput
+                  formControlName="requestType"
+                  [matAutocomplete]="reqType"
+                />
+                <mat-autocomplete autoActiveFirstOption #reqType="matAutocomplete">
+                  <mat-option
+                    *ngFor="let req of requestTypes"
+                    [value]="req.Type"
+                  >
+                    {{ req.Type }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <!-- <mat-form-field>
                 <mat-label>סוג בקשה</mat-label>
                 <mat-select formControlName="requestType">
                   <mat-option *ngFor="let option of options" [value]="option">{{
                     option
                   }}</mat-option>
                 </mat-select>
+              </mat-form-field> -->
+              <mat-form-field>
+                <input
+                  formControlName="subSubmitsRequestID"
+                  matInput
+                  placeholder="ת.ז. ממלא בא כוח"
+                  type="tel"
+                />
               </mat-form-field>
               <mat-form-field class="example-full-width">
                 <mat-label>תאור</mat-label>
@@ -88,49 +122,95 @@
             </mat-expansion-panel-header>
             <form [formGroup]="electoralForm">
               <mat-form-field>
-                <mat-label>רשימה</mat-label>
-                <mat-select formControlName="functionList">
-                  <mat-option *ngFor="let option of options" [value]="option">{{
-                    option
-                  }}</mat-option>
-                </mat-select>
+                <input
+                  type="text"
+                  aria-label="Number"
+                  placeholder="רשימה"
+                  matInput
+                  formControlName="functionList"
+                  [matAutocomplete]="FuncList"
+                />
+                <mat-autocomplete
+                  autoActiveFirstOption
+                  #FuncList="matAutocomplete"
+                >
+                  <mat-option
+                    *ngFor="let func of filteredFunctionList | async"
+                    [value]="func.name"
+                  >
+                    {{ func.name }}
+                  </mat-option>
+                </mat-autocomplete>
               </mat-form-field>
+
               <mat-form-field>
-                <mat-label>סוג רשימה</mat-label>
-                <mat-select formControlName="functionType">
-                  <mat-option *ngFor="let option of options" [value]="option">{{
-                    option
-                  }}</mat-option>
-                </mat-select>
+                <input
+                  type="text"
+                  aria-label="Number"
+                  placeholder="סוג רשימה"
+                  matInput
+                  formControlName="functionType"
+                  [matAutocomplete]="FuncType"
+                />
+                <mat-autocomplete
+                  autoActiveFirstOption
+                  #FuncType="matAutocomplete"
+                >
+                  <mat-option
+                    *ngFor="let type of filteredFunctionTypes | async"
+                    [value]="type.type"
+                  >
+                    {{ type.type }}
+                  </mat-option>
+                </mat-autocomplete>
               </mat-form-field>
+
               <mat-form-field>
-                <mat-label>שם סיעה יוצאת</mat-label>
-                <mat-select formControlName="functionName">
-                  <mat-option *ngFor="let option of options" [value]="option">{{
-                    option
-                  }}</mat-option>
-                </mat-select>
+                <input
+                  type="text"
+                  aria-label="Number"
+                  placeholder="שם סיעה יוצאת"
+                  matInput
+                  formControlName="functionName"
+                  [matAutocomplete]="functionName"
+                />
+                <mat-autocomplete
+                  autoActiveFirstOption
+                  #functionName="matAutocomplete"
+                >
+                  <mat-option
+                    *ngFor="let funcName of filteredFunctionNames | async"
+                    [value]="funcName.name"
+                  >
+                    {{ funcName.name }}
+                  </mat-option>
+                </mat-autocomplete>
               </mat-form-field>
               <mat-form-field>
                 <input
                   formControlName="candidateName"
                   matInput
-                  placeholder="שם מועמד"
+                  placeholder=" שם מועמד לראש רשות"
                 />
               </mat-form-field>
               <mat-form-field>
                 <input
                   formControlName="candidateId"
                   matInput
-                  placeholder="ת.ז. מועמד לרשימה"
+                  placeholder="ת.ז. מועמד לראשות רשות"
+                  type="tel"
                 />
               </mat-form-field>
               <div class="links">
                 <span>
-                  <a mat-flat-button (click)="openDialogLead()">חתימות לראש רשות</a>
+                  <a mat-flat-button (click)="openDialogLead()"
+                    >חתימות לראש רשות</a
+                  >
                 </span>
                 <span>
-                  <a mat-flat-button (click)="openDialogList()">חתימות לרשימה</a>
+                  <a mat-flat-button (click)="openDialogList()"
+                    >חתימות לרשימה</a
+                  >
                 </span>
                 <span>
                   <a mat-flat-button (click)="openDialog()">מועמדים למועצה</a>
@@ -154,9 +234,14 @@
             </mat-expansion-panel-header>
             <form [formGroup]="statusForm">
               <mat-form-field class="responseTxt">
-                <mat-label>תגובת משרד הפנים</mat-label>
+                <mat-label>סטטוס</mat-label>
                 <textarea formControlName="status" matInput></textarea>
               </mat-form-field>
+              <mat-form-field class="responseTxt">
+                <mat-label>תגובת משרד הפנים</mat-label>
+                <textarea formControlName="officeRespond" matInput></textarea>
+              </mat-form-field>
+              
             </form>
           </mat-expansion-panel>
         </mat-accordion>
@@ -291,9 +376,4 @@
       </div>
     </section>
   </section>
-  <footer>
-    <mat-toolbar>
-      <button mat-raised-button color="primary">שלח</button>
-    </mat-toolbar>
-  </footer>
 </div>

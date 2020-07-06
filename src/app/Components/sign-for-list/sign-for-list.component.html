@@ -32,6 +32,9 @@
           <button mat-raised-button color="primary" (click)="exportToExcel()">
               יצא  Excel<fa-icon [icon]="faFileExcel"></fa-icon>
             </button>
+            <button mat-raised-button color="primary" (click)="saveAndClose()">
+              שמירה<fa-icon [icon]="faSave"></fa-icon>
+              </button>
         </div>
         <input
           type="file"
@@ -64,9 +67,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let cand of candidateListFiltered">
-            <td scope="row">{{ cand.name }}</td>
-            <td>{{ cand.ID }}</td>
-            <td>{{ cand.age }}</td>
+            <td scope="row">{{ cand.Name }}</td>
+            <td>{{ cand.ID | digitfix }}</td>
+            <td>{{ cand.Age | digitfix }}</td>
             <td style="padding: 0px;">
               <div class="icons-container">
                 <span class="edit-icon"><fa-icon [icon]="faEdit"></fa-icon></span>

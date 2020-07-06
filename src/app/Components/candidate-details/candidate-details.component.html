@@ -1,52 +1,61 @@
 <div class="container-fluid">
   <div class="title mat-display-1">
-    מועמדים למועצה
+    מועמדים לראש רשות
   </div>
   <form [formGroup]="candAddForm">
     <div class="candidate-add row">
       <mat-form-field class="col-12 col-lg-6">
-        <input matInput placeholder="מועמד למועצה" formControlName="name" />
+        <input matInput placeholder="מועמד לראש רשות" formControlName="name" />
       </mat-form-field>
       <mat-form-field class="col-12 col-lg-6">
-        <input matInput placeholder="ת.ז." formControlName="id" type="number"  />
+        <input matInput placeholder="ת.ז." formControlName="id" type="number" />
       </mat-form-field>
       <mat-form-field class="col-12 col-lg-6">
         <input
           matInput
           placeholder="מספר ברשימה"
           formControlName="numberInElectral"
-          type="number" 
+          type="number"
         />
       </mat-form-field>
 
       <mat-form-field class="col-12 col-lg-6">
         <input matInput placeholder="גיל" formControlName="age" type="number" />
       </mat-form-field>
-      <span class="col-12 error-msg" 
-      *ngIf="
-        !candAddForm.controls.age.valid &&
-        candAddForm.controls.age.touched
-      "
-    >
-      <fa-icon [icon]="faExclamationTriangle"></fa-icon> הגיל המותר מעל 18</span
-    >
+      <span
+        class="col-12 error-msg"
+        *ngIf="
+          !candAddForm.controls.age.valid && candAddForm.controls.age.touched
+        "
+      >
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon> הגיל המותר מעל
+        18</span
+      >
       <div class="controls">
-        <button mat-raised-button color="primary" (click)="addCandidate()" (disabled)="!candAddForm.valid">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="addCandidate()"
+          (disabled)="(!candAddForm.valid)"
+        >
           הוסף +
         </button>
         <button mat-raised-button color="primary" (click)="addFile()">
           יבא Excel <fa-icon [icon]="faFileExcel"></fa-icon>
         </button>
         <button mat-raised-button color="primary" (click)="exportToExcel()">
-            יצא  Excel<fa-icon [icon]="faFileExcel"></fa-icon>
-          </button>
+          יצא Excel<fa-icon [icon]="faFileExcel"></fa-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="saveAndClose()">
+          שמירה<fa-icon [icon]="faSave"></fa-icon>
+        </button>
       </div>
       <input
         type="file"
         #file
         style="display: none;"
         (change)="onFilesAdded($event.target.files)"
-        onclick="this.value = null" 
+        onclick="this.value = null"
       />
     </div>
     <div class="messages" *ngIf="excelImportErrorMessages.length > 0">
@@ -64,20 +73,43 @@
     <table class="table" id="candTable">
       <thead>
         <tr>
-          <th>שם</th>
-          <th>ת.ז.</th>
-          <th>מספר ברשימה</th>
-          <th></th>
+          <th  scope="col">שם</th>
+          <th  scope="col">ת.ז.</th>
+          <th  scope="col">מספר ברשימה</th>
+          <th  scope="col"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let cand of candidateListFiltered">
-          <td scope="row">{{ cand.name }}</td>
-          <td>{{ cand.ID }}</td>
-          <td>{{ cand.numInElect }}</td>
+        <tr *ngFor="let cand of candidateListFiltered; let i = index">
+          <td scope="row" [ngClass]="{'edit': cand.Edit}" >
+           <span *ngIf="!cand.Edit"> {{ cand.Name }}</span>
+            <input
+              matInput
+              *ngIf="cand.Edit"
+              [(ngModel)]="candidateListFiltered[i].Name"
+            />
+          </td>
+          <td  [ngClass]="{'edit': cand.Edit}">
+          <span *ngIf="!cand.Edit">  {{ cand.ID | digitfix }}</span>
+            <input
+              matInput
+              *ngIf="cand.Edit"
+              [(ngModel)]="candidateListFiltered[i].ID"
+            />
+          </td>
+          <td  [ngClass]="{'edit': cand.Edit}">
+            <span *ngIf="!cand.Edit">   {{ cand.NumInElectral | digitfix }}</span>
+            <input
+              matInput
+              *ngIf="cand.Edit"
+              [(ngModel)]="candidateListFiltered[i].NumInElectral"
+            />
+          </td>
           <td style="padding: 0px;">
             <div class="icons-container">
-              <span class="edit-icon"><fa-icon [icon]="faEdit"></fa-icon></span>
+              <span class="edit-icon" (click)="edit(cand)"
+                ><fa-icon [icon]="faEdit"></fa-icon
+              ></span>
               <span class="delete-icon" (click)="removeCandidate(cand.ID)"
                 ><fa-icon [icon]="faEraser"></fa-icon
               ></span>

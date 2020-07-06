@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, Inject } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Candidate } from "src/app/Models/Candidate";
 import {
@@ -6,44 +6,67 @@ import {
   faEraser,
   faExclamationTriangle,
   faFileExcel,
+  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import * as XLSX from "xlsx";
 import { ExcelService } from "src/app/Services/excel.service";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { RequestDetailsComponent } from "src/app/Pages/request-details/request-details.component";
+
 const { read, write, utils } = XLSX;
-const MIN_SIGN_NUMBER = 10;
+
 
 @Component({
-  selector: 'app-sign-for-lead',
-  templateUrl: './sign-for-lead.component.html',
-  styleUrls: ['./sign-for-lead.component.scss']
+  selector: "app-sign-for-lead",
+  templateUrl: "./sign-for-lead.component.html",
+  styleUrls: ["./sign-for-lead.component.scss"],
 })
 export class SignForLeadComponent implements OnInit {
-
+  MIN_SIGN_NUMBER = 10;
   candAddForm: FormGroup;
   @ViewChild("file") file;
-  candidateList: Array<Candidate> = [
-    { name: "ישראל ישראל", age: 33, ID: "32156478", numInElect: 4 },
-    { name: "ישראל ישראל", age: 33, ID: "31156478", numInElect: 4 },
-  ];
+  candidateList: Array<Candidate> = [];
   candidateListFiltered: Array<Candidate> = [];
   faEdit = faEdit;
   faEraser = faEraser;
   faFileExcel = faFileExcel;
   faExclamationTriangle = faExclamationTriangle;
+  faSave = faSave;
   arrayBuffer: any;
   filelist: any[];
   excelImportErrorMessages = [];
-  constructor(private excelService: ExcelService) {}
+  constructor(
+    public dialogRef: MatDialogRef<RequestDetailsComponent>,
+    private excelService: ExcelService,
+    @Inject(MAT_DIALOG_DATA) public data: Array<Candidate>
+  ) {}
 
   ngOnInit(): void {
+    let minSignNumber = localStorage.getItem("minSignNumber");
+    console.log("## minSignNumber ",minSignNumber);
+    if(minSignNumber !=undefined && minSignNumber!= ""){
+      this.MIN_SIGN_NUMBER = parseInt(minSignNumber);
+    }
     this.candAddForm = new FormGroup({
       name: new FormControl("", Validators.required),
       id: new FormControl("", Validators.required),
       age: new FormControl("", Validators.required),
     });
+    this.candidateList = this.data;
+    // this.candidateList.map(x=>{
+    //   let ag = x.Age.toString();
+    //   let numEc =x.NumInElectral.toString();
+    //   let id = x.ID.toString(); 
+    //   x.Age = parseInt(ag.slice(0, ag.indexOf(".")));
+    //   x.NumInElectral = parseInt(numEc.slice(0, numEc.indexOf(".")));
+    //   x.ID = id.slice(0, id.indexOf("."));
+    // })
     this.candidateListFiltered = [...this.candidateList];
-    if(this.candidateListFiltered.length <MIN_SIGN_NUMBER ){
-      this.excelImportErrorMessages.push(`מספר החתימות פחות מ ${MIN_SIGN_NUMBER}`);
+
+    if (this.candidateListFiltered.length < this.MIN_SIGN_NUMBER) {
+      this.excelImportErrorMessages.push(
+        `מספר החתימות פחות מ ${this.MIN_SIGN_NUMBER}`
+      );
     }
   }
 
@@ -111,8 +134,8 @@ export class SignForLeadComponent implements OnInit {
           });
           console.log("##candidateListFiltered ", this.candidateListFiltered);
           let tmpArrDup = this.candidateListFiltered.filter((e: any) => {
-            console.log("--> ",e.id + " === " + el.ID);
-            console.log("##e.id === el.ID" , e.id === el.ID);
+            console.log("--> ", e.id + " === " + el.ID);
+            console.log("##e.id === el.ID", e.id === el.ID);
             return e.id === el.ID;
           });
 
@@ -142,15 +165,17 @@ export class SignForLeadComponent implements OnInit {
           IdInElectral: number;
         }) => {
           let candidate = new Candidate();
-          candidate.name = el.Name;
-          candidate.age = el.Age;
+          candidate.Name = el.Name;
+          candidate.Age = el.Age;
           candidate.ID = el.ID.toString();
-          candidate.numInElect = el.IdInElectral;
+          candidate.NumInElectral = el.IdInElectral;
           this.candidateListFiltered.push(candidate);
         }
       );
-      if(this.candidateListFiltered.length <MIN_SIGN_NUMBER ){
-        this.excelImportErrorMessages.push(`מספר החתימות פחות מ ${MIN_SIGN_NUMBER}`);
+      if (this.candidateListFiltered.length < this.MIN_SIGN_NUMBER) {
+        this.excelImportErrorMessages.push(
+          `מספר החתימות פחות מ ${this.MIN_SIGN_NUMBER}`
+        );
       }
     };
 
@@ -173,9 +198,9 @@ export class SignForLeadComponent implements OnInit {
     this.excelImportErrorMessages = [];
     if (this.candAddForm.valid) {
       let newCand = new Candidate();
-      newCand.name = this.candAddForm.get("name").value;
+      newCand.Name = this.candAddForm.get("name").value;
       newCand.ID = this.candAddForm.get("id").value;
-      newCand.age = this.candAddForm.get("age").value;
+      newCand.Age = this.candAddForm.get("age").value;
       console.log(newCand);
       if (
         this.candidateListFiltered.filter((x) => x.ID === newCand.ID).length > 0
@@ -187,11 +212,12 @@ export class SignForLeadComponent implements OnInit {
     }
   }
 
-  exportToExcel(){
-    let element = document.getElementById('candTable'); 
+  exportToExcel() {
+    let element = document.getElementById("candTable");
     console.log("## element ", element);
     this.excelService.exportToExcel(element);
-
   }
-
+  saveAndClose() {
+    this.dialogRef.close(this.candidateListFiltered);
+  }
 }

@@ -1,6 +1,7 @@
 .container-fluid {
     direction: rtl;
     text-align: right;
+    padding:0px;
 }
 .candidate-add {
     display: flex;
@@ -29,8 +30,26 @@ mat-form-field {
     margin: 15px;
 }
 .controls button{
-    margin: 0px 5px 0px;
+    margin: 4px 5px 4px;
 }
 .error-msg{
     color:red;
+}
+.controls{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+fa-icon{
+    margin-right: 10px;
+}
+// table mat-form-field{
+//     width:40px;
+// }
+.edit{
+    input {
+        border: 1px solid black;
+        padding: 4px;
+        border-radius: 5px;
+    }
 }

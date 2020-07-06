@@ -1,0 +1,18 @@
+{
+    "CandidateNameList": [
+        {
+            "Name": "ארז נועם",
+            "Age": "45",
+            "NumInElectral": "2",
+            "ID": "12345612",
+            "UniqueID": "0ae5cdc2-c6be-ea11-911b-005056b36431"
+        },
+        {
+            "Name": "אילן דביר",
+            "Age": "44",
+            "NumInElectral": "3",
+            "ID": "24444444",
+            "UniqueID": "0fe5cdc2-c6be-ea11-911b-005056b36431"
+        }
+    ]
+}

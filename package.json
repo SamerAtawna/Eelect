@@ -27,6 +27,8 @@
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "bootstrap": "^4.5.0",
+    "moment": "^2.27.0",
+    "ngx-toastr": "^12.1.0",
     "read-excel-file": "^4.0.6",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

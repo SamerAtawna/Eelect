@@ -63,3 +63,28 @@ td.mat-footer-cell:first-of-type {
 body{
     background-color: #37447514;
 }
+mat-toolbar{
+    background-image: url("../../../assets/Header_pic.jpg");
+    background-repeat: no-repeat;
+    background-color: white;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.settings mat-icon{
+    margin: 10px;;
+}
+.settings-details{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.table{
+    margin:20px;
+}
+.version {
+    position: fixed;
+    bottom:0px;
+    left:0px;
+    font-weight: bold;
+}

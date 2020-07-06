@@ -8,7 +8,9 @@ const routes: Routes = [
 { path: '', redirectTo: '/locate-request', pathMatch: 'full' },
 { path: 'locate-request', component: LocateRequestComponent },
 { path: 'request-details', component: RequestDetailsComponent },
-{ path: '**', component: LocateRequestComponent }];
+{ path: '**', component: LocateRequestComponent },
+{ path: '*', component: LocateRequestComponent}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

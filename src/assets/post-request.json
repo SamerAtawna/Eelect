@@ -1,0 +1,83 @@
+{
+    "RequestId": "d30c0588-abbe-ea11-911b-005056b36431",
+    "RequestName": "דלית אל כרמל 2021",
+    "Status": "957620002",
+    "Type": null,
+    "Description": "בקשה ליצירת הרשימה החרדית למועצה",
+    "City": "957620000",
+    "FunctionList": "957620000",
+    "FunctionType": null,
+    "FunctionName": "957620000",
+    "CandidateLeadName": "הרצל ראובני",
+    "CandidateLeadId": "0272372380",
+    "CandidateLeadAge": null,
+    "CandidateNameList": [
+        {
+            "Name": "ששון גבאי",
+            "Age": "35.0000000000",
+            "NumInElectral": "1.0000000000",
+            "ID": "26345270.0000000000",
+            "UniqueID": "dc0c0588-abbe-ea11-911b-005056b36431"
+        },
+        {
+            "Name": "שעוזי חיטמן",
+            "Age": "30.0000000000",
+            "NumInElectral": "3.0000000000",
+            "ID": "304125240.0000000000",
+            "UniqueID": "de0c0588-abbe-ea11-911b-005056b36431"
+        }
+    ],
+    "SubmitsRequest": "יוסף חתוכה",
+    "SubmitsRequestId": "27121688",
+    "TreatmentStatus": null,
+    "ContactName": "יעקוב גנרלי",
+    "Phone": null,
+    "Email": "amzaleg@gmail.com",
+    "Url": "http://wwww.ynet.com",
+    "OfficeRespond": [
+        "@[112,d30c0588-abbe-ea11-911b-005056b36431,\"דלית אל כרמל 2021\"] was assigned to @[8,a158ae75-a7a7-e911-910d-005056b36431,\"Erez Noam\"] by @[8,979c96c5-fdb8-ea11-911b-005056b36431,\"Ilan Dvir\"]",
+        "@[112,d30c0588-abbe-ea11-911b-005056b36431,\"דלית אל כרמל 2021\"] was assigned to @[8,979c96c5-fdb8-ea11-911b-005056b36431,\"Ilan Dvir\"] by @[8,4c6d76ad-09a4-e911-910c-005056b36431,\"CRMAdmin USR\"]",
+        "@[112,d30c0588-abbe-ea11-911b-005056b36431,\"דלית אל כרמל 2021\"] was assigned to @[8,a158ae75-a7a7-e911-910d-005056b36431,\"Erez Noam\"] by @[8,979c96c5-fdb8-ea11-911b-005056b36431,\"Ilan Dvir\"]",
+        "@[112,d30c0588-abbe-ea11-911b-005056b36431,\"דלית אל כרמל 2021\"] was assigned to @[8,979c96c5-fdb8-ea11-911b-005056b36431,\"Ilan Dvir\"] by @[8,4c6d76ad-09a4-e911-910c-005056b36431,\"CRMAdmin USR\"]",
+        "@[112,d30c0588-abbe-ea11-911b-005056b36431,\"דלית אל כרמל 2021\"] was assigned to @[8,a158ae75-a7a7-e911-910d-005056b36431,\"Erez Noam\"] by @[8,979c96c5-fdb8-ea11-911b-005056b36431,\"Ilan Dvir\"]",
+        "Case: Created by @[8,4c6d76ad-09a4-e911-910c-005056b36431,\"CRMAdmin USR\"] for Contact @[2,3cf2c77e-abbe-ea11-911b-005056b36431,\"יעקוב גנרלי\"]."
+    ],
+    "AgentName": null,
+    "AgentId": null,
+    "SubAgent": null,
+    "SubAgentId": null,
+    "SignForLead": [
+        {
+            "Name": "דידי אור",
+            "Age": "22.0000000000",
+            "ID": "2823160.0000000000"
+        },
+        {
+            "Name": "דורי בן מושה",
+            "Age": "28.0000000000",
+            "ID": "2777712345.0000000000"
+        },
+        {
+            "Name": "אלון עובדיה",
+            "Age": "65.0000000000",
+            "ID": "2757712345.0000000000"
+        }
+    ],
+    "SignForList": [
+        {
+            "Name": "דידי אור",
+            "Age": "22.0000000000",
+            "ID": "2823160.0000000000"
+        },
+        {
+            "Name": "דורי בן מושה",
+            "Age": "28.0000000000",
+            "ID": "2777712345.0000000000"
+        },
+        {
+            "Name": "אלון עובדיה",
+            "Age": "65.0000000000",
+            "ID": "2757712345.0000000000"
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, Inject } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Candidate } from "src/app/Models/Candidate";
 import {
@@ -6,9 +6,12 @@ import {
   faEraser,
   faExclamationTriangle,
   faFileExcel,
+  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import * as XLSX from "xlsx";
 import { ExcelService } from "src/app/Services/excel.service";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { RequestDetailsComponent } from "src/app/Pages/request-details/request-details.component";
 const { read, write, utils } = XLSX;
 
 @Component({
@@ -17,20 +20,40 @@ const { read, write, utils } = XLSX;
   styleUrls: ["./candidate-details.component.scss"],
 })
 export class CandidateDetailsComponent implements OnInit {
+  MIN_SIGN_NUMBER = 700;
   candAddForm: FormGroup;
   @ViewChild("file") file;
-  candidateList: Array<Candidate> = [  ];
+  candidateList: Array<Candidate> = [];
   candidateListFiltered: Array<Candidate> = [];
   faEdit = faEdit;
   faEraser = faEraser;
   faFileExcel = faFileExcel;
+  faSave = faSave;
   faExclamationTriangle = faExclamationTriangle;
   arrayBuffer: any;
   filelist: any[];
   excelImportErrorMessages = [];
-  constructor(private excelService: ExcelService) {}
+  constructor(
+    public dialogRef: MatDialogRef<RequestDetailsComponent>,
+    private excelService: ExcelService,
+    @Inject(MAT_DIALOG_DATA) public data: Array<Candidate>
+  ) {
+    this.candidateList = data;
+    // this.candidateList.map(x=>{
+    //   let ag = x.Age.toString();
+    //   let numEc =x.NumInElectral.toString();
+    //   let id = x.ID.toString();
+    //   x.Age = parseInt(ag.slice(0, ag.indexOf(".")));
+    //   x.NumInElectral = parseInt(numEc.slice(0, numEc.indexOf(".")));
+    //   x.ID = id.slice(0, id.indexOf("."));
+    // })
+  }
 
   ngOnInit(): void {
+    let minCandNumber = localStorage.getItem("minCandNumber");
+    if (minCandNumber != undefined && minCandNumber != "") {
+      this.MIN_SIGN_NUMBER = parseInt(minCandNumber);
+    }
     this.candAddForm = new FormGroup({
       name: new FormControl("", Validators.required),
       age: new FormControl("", [Validators.required, Validators.min(18)]),
@@ -38,8 +61,32 @@ export class CandidateDetailsComponent implements OnInit {
       numberInElectral: new FormControl("", Validators.required),
     });
     this.candidateListFiltered = [...this.candidateList];
+    // this.candidateListFiltered = [
+    //   {
+    //     Name: "סשדגשג",
+    //     Age: 23,
+    //     Edit: false,
+    //     NumInElectral: 333.0,
+    //     ID: "33333.00000",
+    //   },
+    // ];
+    console.log("++data ", this.data);
+    console.log("++candidateListFiltered ", this.candidateListFiltered);
+    if (this.candidateListFiltered.length < this.MIN_SIGN_NUMBER) {
+      this.excelImportErrorMessages.push(
+        `מספר החתימות פחות מ ${this.MIN_SIGN_NUMBER}`
+      );
+    }
   }
-
+  trackByFn(index: any, item: any) {
+    console.log(index, item);
+    return index;
+  }
+  edit(cand: Candidate) {
+    this.candidateListFiltered.find(
+      (x) => x.ID === cand.ID
+    ).Edit = !this.candidateListFiltered.find((x) => x.ID === cand.ID).Edit;
+  }
   onFilesAdded(e) {
     console.log(e);
     let currFile;
@@ -104,8 +151,8 @@ export class CandidateDetailsComponent implements OnInit {
           });
           console.log("##candidateListFiltered ", this.candidateListFiltered);
           let tmpArrDup = this.candidateListFiltered.filter((e: any) => {
-            console.log("--> ",e.id + " === " + el.ID);
-            console.log("##e.id === el.ID" , e.id === el.ID);
+            console.log("--> ", e.id + " === " + el.ID);
+            console.log("##e.id === el.ID", e.id === el.ID);
             return e.id === el.ID;
           });
 
@@ -135,13 +182,18 @@ export class CandidateDetailsComponent implements OnInit {
           IdInElectral: number;
         }) => {
           let candidate = new Candidate();
-          candidate.name = el.Name;
-          candidate.age = el.Age;
+          candidate.Name = el.Name;
+          candidate.Age = el.Age;
           candidate.ID = el.ID.toString();
-          candidate.numInElect = el.IdInElectral;
+          candidate.NumInElectral = el.IdInElectral;
           this.candidateListFiltered.push(candidate);
         }
       );
+      if (this.candidateListFiltered.length < this.MIN_SIGN_NUMBER) {
+        this.excelImportErrorMessages.push(
+          `מספר החתימות פחות מ ${this.MIN_SIGN_NUMBER}`
+        );
+      }
     };
     console.log("##candidateListFiltered ", this.candidateListFiltered);
   }
@@ -163,10 +215,11 @@ export class CandidateDetailsComponent implements OnInit {
     this.excelImportErrorMessages = [];
     if (this.candAddForm.valid) {
       let newCand = new Candidate();
-      newCand.name = this.candAddForm.get("name").value;
-      newCand.age = this.candAddForm.get("age").value;
+      newCand.Name = this.candAddForm.get("name").value;
+      newCand.Age = this.candAddForm.get("age").value;
       newCand.ID = this.candAddForm.get("id").value;
-      newCand.numInElect = this.candAddForm.get("numberInElectral").value;
+      newCand.NumInElectral = this.candAddForm.get("numberInElectral").value;
+      newCand.Edit = false;
       console.log(newCand);
       if (
         this.candidateListFiltered.filter((x) => x.ID === newCand.ID).length > 0
@@ -178,10 +231,13 @@ export class CandidateDetailsComponent implements OnInit {
     }
   }
 
-  exportToExcel(){
-    let element = document.getElementById('candTable'); 
+  exportToExcel() {
+    let element = document.getElementById("candTable");
     console.log("## element ", element);
     this.excelService.exportToExcel(element);
+  }
 
+  saveAndClose() {
+    this.dialogRef.close(this.candidateListFiltered);
   }
 }

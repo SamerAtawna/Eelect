@@ -1,6 +1,8 @@
 export class Candidate{
-    name: string;
+    Name: string;
     ID: string;
-    numInElect: number;
-    age:number;
+    NumInElectral: number;
+    Age:number;
+    Edit: boolean;
+    UniqueID: string;
 }

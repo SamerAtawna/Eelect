@@ -8,7 +8,7 @@
     // flex-wrap: wrap;
 }
 .main{
-    margin-top:50px;
+    margin-top:15px;
     height: auto;
     min-height: 80vh;;
     justify-content: space-around;
@@ -56,4 +56,21 @@ span a{
     display: flex;
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
+}
+mat-toolbar{
+    background-image: url("../../../assets/Header_pic.jpg");
+    background-repeat: no-repeat;
+    background-color: white;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.main-controls{
+    text-align: left;
+}
+.third-row{
+    margin-bottom: 30px;
+}
+mat-toolbar span {
+    font-weight: bold;;
 }
